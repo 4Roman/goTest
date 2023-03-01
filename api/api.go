@@ -85,22 +85,24 @@ func (s *server) getTop100Handler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "", http.StatusBadRequest)
 		return
 	}
-	var result string
+	var nextLine []byte
+	nextLine = []byte("\n")
 
-	// создание пайплайнов агрегации для поиска топ-100 наиболее популярных значений каждого поля
 	osName := helpers.PiplineTop100("os_name")
+	result := helpers.BytesFromPipeline(s.ctx, osName)
+	result = append(result, nextLine...)
+
 	browserName := helpers.PiplineTop100("browser_name")
+	result = append(result, helpers.BytesFromPipeline(s.ctx, browserName)...)
+	result = append(result, nextLine...)
+
 	phoneBrand := helpers.PiplineTop100("phone_brand")
+	result = append(result, helpers.BytesFromPipeline(s.ctx, phoneBrand)...)
+	result = append(result, nextLine...)
+
 	screenRes := helpers.PiplineTop100("screen_res")
-	result += "OS:\n"
-	result += helpers.StringFromPipeline(s.ctx, osName)
-	result += "Браузеры:\n"
-	result += helpers.StringFromPipeline(s.ctx, browserName)
-	result += "Марка телефона:\n"
-	result += helpers.StringFromPipeline(s.ctx, phoneBrand)
-	result += "Разрешение экрана:\n"
-	result += helpers.StringFromPipeline(s.ctx, screenRes)
-	w.Write([]byte(result))
+	result = append(result, helpers.BytesFromPipeline(s.ctx, screenRes)...)
+	w.Write(result)
 }
 
 func (s *server) getTop100With2FieldsHandler(w http.ResponseWriter, r *http.Request) {
@@ -108,7 +110,17 @@ func (s *server) getTop100With2FieldsHandler(w http.ResponseWriter, r *http.Requ
 		http.Error(w, "", http.StatusBadRequest)
 		return
 	}
-	osVerOsName := helpers.PiplineTop100WithTwoFields("os_name", "os_version")
-	result := helpers.StringFromPipelineWith2Field(s.ctx, osVerOsName)
+	var result []byte
+	var nextLine []byte
+	nextLine = []byte("\n")
+
+	result = append(result, helpers.BytesFromPipeline(s.ctx, helpers.PipelineForOS())...)
+	result = append(result, nextLine...)
+
+	result = append(result, helpers.BytesFromPipeline(s.ctx, helpers.PipelineForBrowser())...)
+	result = append(result, nextLine...)
+
+	result = append(result, helpers.BytesFromPipeline(s.ctx, helpers.PipelineForPhone())...)
+
 	w.Write(result)
 }
