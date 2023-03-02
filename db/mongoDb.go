@@ -22,7 +22,7 @@ func Init(ctx context.Context) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	// Создаём коллекцию
+	// Получаем коллекцию
 	Client = client
 	Collection = Client.Database(configs.Conf.DbName).Collection(configs.Conf.DbCollection)
 }

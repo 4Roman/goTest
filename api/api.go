@@ -103,6 +103,7 @@ func (s *server) getTop100Handler(w http.ResponseWriter, r *http.Request) {
 	screenRes := helpers.PiplineTop100("screen_res")
 	result = append(result, helpers.BytesFromPipeline(s.ctx, screenRes)...)
 	w.Write(result)
+	w.WriteHeader(http.StatusOK)
 }
 
 func (s *server) getTop100With2FieldsHandler(w http.ResponseWriter, r *http.Request) {
@@ -123,4 +124,5 @@ func (s *server) getTop100With2FieldsHandler(w http.ResponseWriter, r *http.Requ
 	result = append(result, helpers.BytesFromPipeline(s.ctx, helpers.PipelineForPhone())...)
 
 	w.Write(result)
+	w.WriteHeader(http.StatusOK)
 }

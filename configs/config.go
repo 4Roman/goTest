@@ -10,6 +10,7 @@ type Config struct {
 	DbPort       string `envconfig:"DB_PORT" default:"27017"`
 	DbName       string `envconfig:"DB_NAME" default:"myDb"`
 	DbCollection string `envconfig:"DB_COLLECTION" default:"UserInfo"`
+	LogDebug     bool   `envconfig:"LOG_DEBUG" default:"true"`
 }
 
 var Conf Config
