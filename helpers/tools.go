@@ -9,7 +9,7 @@ import (
 	"goTest/db"
 )
 
-// пайплайн для топ 100 для любого поля
+// пайплайн для топ 100 по одному полю
 func PiplineTop100(field string) bson.A {
 	return bson.A{
 		bson.M{"$group": bson.M{"_id": "$" + field, "count": bson.M{"$sum": 1}}},
@@ -17,23 +17,6 @@ func PiplineTop100(field string) bson.A {
 		bson.M{"$limit": 100},
 	}
 }
-
-//func StringFromPipeline(ctx context.Context, pipeline any) string {
-//	var result string
-//	cursor, err := db.Collection.Aggregate(ctx, pipeline)
-//	if err != nil {
-//		log.Error(err)
-//	}
-//	defer cursor.Close(ctx)
-//	var results []models.TopResult
-//	if err = cursor.All(ctx, &results); err != nil {
-//		log.Error(err)
-//	}
-//	for _, r := range results {
-//		result += fmt.Sprintf("%s: %d\n", r.ID, r.Count)
-//	}
-//	return result
-//}
 
 func BytesFromPipeline(ctx context.Context, pipeline any) []byte {
 	cursor, err := db.Collection.Aggregate(ctx, pipeline)

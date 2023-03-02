@@ -5,13 +5,14 @@ import (
 	"github.com/gusleein/golog"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"goTest/configs"
 )
 
 var Client *mongo.Client
 var Collection *mongo.Collection
 
 func Init(ctx context.Context) {
-	opt := options.Client().ApplyURI("mongodb://localhost:27017")
+	opt := options.Client().ApplyURI("mongodb://" + configs.Conf.DbHost + ":" + configs.Conf.DbPort)
 	client, err := mongo.Connect(ctx, opt)
 	if err != nil {
 		log.Fatal(err)
@@ -23,5 +24,5 @@ func Init(ctx context.Context) {
 	}
 	// Создаём коллекцию
 	Client = client
-	Collection = Client.Database("myDb").Collection("UserInfo")
+	Collection = Client.Database(configs.Conf.DbName).Collection(configs.Conf.DbCollection)
 }

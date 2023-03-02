@@ -6,6 +6,10 @@ import (
 )
 
 type Config struct {
+	DbHost       string `envconfig:"DB_HOST" default:"localhost"`
+	DbPort       string `envconfig:"DB_PORT" default:"27017"`
+	DbName       string `envconfig:"DB_NAME" default:"myDb"`
+	DbCollection string `envconfig:"DB_COLLECTION" default:"UserInfo"`
 }
 
 var Conf Config
